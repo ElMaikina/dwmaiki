@@ -6,7 +6,7 @@ static const unsigned int snap      = 0;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const int refreshrate        = 240.00;
-static const char *fonts[]          = { "Century Gothic:size=10", "Symbols Nerd Font:size=12" };
+static const char *fonts[]          = { "Century Gothic:size=10", "Symbols Nerd Font:size=12", "Font Awesome 6 Brands:size=6" };
 static const char dmenufont[]       = "Century Gothic:size=10";
 static const char col_gray1[]       = "#000000";
 static const char col_gray2[]       = "#444444";
@@ -66,7 +66,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "st", NULL };
 static const char *browcmd[]  = { "firefox", NULL };
 static const char *filescmd[]  = { "thunar", NULL };
-static const char *kittycmd[]  = { "kitty", NULL };
+static const char *kittycmd[]  = { "kitty", "-1", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        		function			 argument */
