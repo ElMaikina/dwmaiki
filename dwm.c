@@ -1996,6 +1996,18 @@ updateicon(Client *c) {
 			free(t);
 			return;
 		}
+		if (strcmp("Eog", t) == 0) {
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
+			free(t);
+			return;
+		}
+		if (strcmp("Discord", t) == 0) {
+			c->icon = (char*)malloc(sizeof("󰙯"));
+			strcpy(c->icon, "󰙯");
+			free(t);
+			return;
+		}
 		if (strcmp("st-256color", t) == 0) {
 			c->icon = (char*)malloc(sizeof(""));
 			strcpy(c->icon, "");
@@ -2003,8 +2015,8 @@ updateicon(Client *c) {
 			return;
 		}
 		if (strcmp("kitty", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰄛"));
-			strcpy(c->icon, "󰄛");
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
