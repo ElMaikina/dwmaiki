@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
@@ -43,11 +43,11 @@ static const int resizehints 	= 0;    /* 1 means respect size hints in tiled res
 static const int lockfullscreen	= 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
-	/* symbol			arrange function */
-	{ "tile",		tile },    /* first entry is default */
-	{ "free",		NULL },    /* no layout function means floating behavior */
+	/* symbol				arrange function */
+	{ "tile",		tile },
+	{ "free",		NULL },
 	{ "mono",		monocle },
-	{ "mid",		centeredmaster }
+	{ "center",		centeredmaster }
 };
 
 /* key definitions */
