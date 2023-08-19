@@ -18,14 +18,19 @@ ____
 
 Primero, instalar las dependencias a traves del terminal:
 
-### Arch Linux / Manjaro
+### 󰣇 Arch Linux /  Manjaro
 ```console
 user@desktop: sudo pacman -S base-devel libx11 libxft libxinerama freetype2 fontconfig
 ```
 
-### Ubuntu / Linux Mint / Debian
+###  Ubuntu / 󰣭 Linux Mint /  Debian
 ```console
 user@desktop: sudo apt install build-essential libx11-dev libxft-dev libxinerama-dev libfreetype6-dev libfontconfig1-dev
+```
+
+###  Fedora
+```console
+user@desktop: sudo dnf install libX11-devel libXft-devel libXinerama-devel libXrandr-devel xorg-x11-xinit-session
 ```
 
  Luego, clonar el proyecto a la carpeta de preferencia y luego compilar:
