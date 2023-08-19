@@ -38,7 +38,7 @@
 #include <X11/Xutil.h>
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
-#endif /* XINERAMA */
+#endif
 #include <X11/Xft/Xft.h>
 
 #include "drw.h"
@@ -1932,6 +1932,18 @@ void updateicon(Client *c) {
 			free(t);
 			return;
 		}
+		if (strcmp("Spotify", t) == 0) {
+			c->icon = (char*)malloc(sizeof(" Spotify"));
+			strcpy(c->icon, " Spotify");
+			free(t);
+			return;
+		}
+		if (strcmp("code-oss", t) == 0) {
+			c->icon = (char*)malloc(sizeof("󰨞 VSCode"));
+			strcpy(c->icon, "󰨞 VSCode");
+			free(t);
+			return;
+		}
 		if (strcmp("st-256color", t) == 0) {
 			c->icon = (char*)malloc(sizeof(" St"));
 			strcpy(c->icon, " St");
@@ -1963,14 +1975,14 @@ void updateicon(Client *c) {
 			return;
 		}
 		else {
-			c->icon = (char*)malloc(sizeof("󰖯 Window"));
-			strcpy(c->icon, "󰖯 Window");
+			c->icon = (char*)malloc(sizeof("󰨔 Window"));
+			strcpy(c->icon, "󰨔 Window");
 			free(t);
 			return;
 		}
 	}
-	c->icon = (char*)malloc(sizeof("󰖯 Window"));
-	strcpy(c->icon, "󰖯 Window");
+	c->icon = (char*)malloc(sizeof("󰨔 Window"));
+	strcpy(c->icon, "󰨔 Window");
 	free(t);
 }
 
