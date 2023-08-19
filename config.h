@@ -1,18 +1,18 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Century Gothic:size=10", "Symbols Nerd Font:size=12", "Font Awesome 6 Brands:size=6" };
 static const char dmenufont[]       = "Century Gothic:size=10";
 static const char col_gray1[]       = "#000000";
-static const char col_gray2[]       = "#444444";
+static const char col_gray2[]       = "#222222";
 static const char col_gray3[]       = "#ffffff";
 static const char col_gray4[]       = "#ffffff";
 static const char col_cyan[]        = "#005577";
-static const char distro[]			= "󰣇";
+static const char distro[]			= "󰣇 Archlinux";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -36,7 +36,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact    	= 0.60; /* factor of master area size [0.05..0.95] */
+static const float mfact    	= 0.50; /* factor of master area size [0.05..0.95] */
 static const int nmaster     	= 1;    /* number of clients in master area */
 static const int resizehints 	= 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen	= 1; /* 1 will force focus on the fullscreen window */
@@ -80,8 +80,8 @@ static const Key keys[] = {
 	//{ MODKEY,                       XK_Up,      	incnmaster,    		 {.i = +1 } },
 	//{ MODKEY,                       XK_Down,      	incnmaster,    		 {.i = -1 } },
 	{ MODKEY,             			XK_f,      		togglefullscr,  	 {0} },
-	{ MODKEY,                       XK_minus,      	setmfact,			 {.f = -0.05} },
-	{ MODKEY,                       XK_equal,      	setmfact,      		 {.f = +0.05} },
+	{ MODKEY,                       XK_minus,      	setmfact,			 {.f = -0.1} },
+	{ MODKEY,                       XK_equal,      	setmfact,      		 {.f = +0.1} },
 	{ MODKEY,                       XK_BackSpace, 	zoom,          		 {0} },
 	{ MODKEY,                       XK_Tab,    		view,          		 {0} },
 	{ MODKEY,             			XK_q,      		killclient,    		 {0} },

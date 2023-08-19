@@ -1909,68 +1909,68 @@ void updateicon(Client *c) {
 		strcpy(t, hint->res_class);
 		XFree(hint);
 		if (strcmp("firefox", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰈹"));
-			strcpy(c->icon, "󰈹");
+			c->icon = (char*)malloc(sizeof("󰈹 Firefox"));
+			strcpy(c->icon, "󰈹 Firefox");
 			free(t);
 			return;
 		}
 		if (strcmp("Thunar", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
+			c->icon = (char*)malloc(sizeof(" Thunar"));
+			strcpy(c->icon, " Thunar");
 			free(t);
 			return;
 		}
 		if (strcmp("feh", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
+			c->icon = (char*)malloc(sizeof(" Feh"));
+			strcpy(c->icon, " Feh");
 			free(t);
 			return;
 		}
 		if (strcmp("discord", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰙯"));
-			strcpy(c->icon, "󰙯");
+			c->icon = (char*)malloc(sizeof("󰙯 Discord"));
+			strcpy(c->icon, "󰙯 Discord");
 			free(t);
 			return;
 		}
 		if (strcmp("st-256color", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
+			c->icon = (char*)malloc(sizeof(" St"));
+			strcpy(c->icon, " St");
 			free(t);
 			return;
 		}
 		if (strcmp("kitty", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
+			c->icon = (char*)malloc(sizeof(" KiTTY"));
+			strcpy(c->icon, " KiTTY");
 			free(t);
 			return;
 		}
 		if (strcmp("steam", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰓓"));
-			strcpy(c->icon, "󰓓");
+			c->icon = (char*)malloc(sizeof("󰓓 Steam"));
+			strcpy(c->icon, "󰓓 Steam");
 			free(t);
 			return;
 		}
 		if (strcmp("obs", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
+			c->icon = (char*)malloc(sizeof(" OBS Studio"));
+			strcpy(c->icon, " OBS Studio");
 			free(t);
 			return;
 		}
 		if (strcmp("Lutris", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
+			c->icon = (char*)malloc(sizeof(" Lutris"));
+			strcpy(c->icon, " Lutris");
 			free(t);
 			return;
 		}
 		else {
-			c->icon = (char*)malloc(sizeof("󰖯"));
-			strcpy(c->icon, "󰖯");
+			c->icon = (char*)malloc(sizeof("󰖯 Window"));
+			strcpy(c->icon, "󰖯 Window");
 			free(t);
 			return;
 		}
 	}
-	c->icon = (char*)malloc(sizeof("󰖯"));
-	strcpy(c->icon, "󰖯");
+	c->icon = (char*)malloc(sizeof("󰖯 Window"));
+	strcpy(c->icon, "󰖯 Window");
 	free(t);
 }
 
