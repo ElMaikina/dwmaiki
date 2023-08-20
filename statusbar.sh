@@ -3,13 +3,33 @@ network() {
 	conntype=$(ip route | awk '/default/ { print substr($5,1,1) }')
 
 	if [ -z "$conntype" ]; then
-		echo " down"
+		echo "no connection"
 	elif [ "$conntype" = "e" ]; then
-		echo " up"
+		echo " up"
 	elif [ "$conntype" = "w" ]; then
 		echo " up"
 	fi
 }
+
+battery() {
+	lvl=$(acpi | awk '{print $4}' | sed s/,//)
+    if [ -d /sys/class/power_supply/$battery ]; then
+		if [ "$lvl" -ge 80 ]; then
+			echo " $lvl%"
+		elif [ "$lvl" -ge 60 ]; then
+			echo " $lvl%"
+		elif [ "$lvl" -ge 40 ]; then
+			echo " $lvl%"
+		elif [ "$lvl" -ge 20 ]; then
+			echo " $lvl%"
+		elif [ "$lvl" -ge 0 ]; then
+			echo " $lvl%"	
+		fi
+	else
+    	echo "󰐧 PSU";
+	fi
+}
+
 volume_alsa() {
 
 	mono=$(amixer -M sget Master | grep Mono: | awk '{ print $2 }')
@@ -41,8 +61,8 @@ clock() {
 main() {
 	while true; do
 		#xsetroot -name " $(ram)  $(cpu)  $(network)  $(volume_alsa)  $(clock) "
-		xsetroot -name " $(network)  $(volume_alsa)  $(clock) "
-		sleep 1
+		xsetroot -name " $(network)  $(battery)  $(volume_alsa)  $(clock) "
+		sleep 16
 	done
 }
 
