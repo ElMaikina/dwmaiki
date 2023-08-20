@@ -13,20 +13,22 @@ network() {
 
 battery() {
 	lvl=$(acpi | awk '{print $4}' | sed s/,//)
-    if [ -d /sys/class/power_supply/$battery ]; then
-		if [ "$lvl" -ge 80 ]; then
-			echo " $lvl%"
-		elif [ "$lvl" -ge 60 ]; then
-			echo " $lvl%"
-		elif [ "$lvl" -ge 40 ]; then
-			echo " $lvl%"
-		elif [ "$lvl" -ge 20 ]; then
-			echo " $lvl%"
-		elif [ "$lvl" -ge 0 ]; then
-			echo " $lvl%"	
-		fi
+	if [ -z $(ls /sys/class/power_supply/) ]; then
+		#if [ "$lvl" -ge 80 ]; then
+		#	echo " $lvl%"
+		#elif [ "$lvl" -ge 60 ]; then
+		#	echo " $lvl%"
+		#elif [ "$lvl" -ge 40 ]; then
+		#	echo " $lvl%"
+		#elif [ "$lvl" -ge 20 ]; then
+		#	echo " $lvl%"
+		#elif [ "$lvl" -ge 0 ]; then
+		#	echo " $lvl%"	
+		#fi
+		#echo " $lvl%"
+    	echo "󰐧 PSU"
 	else
-    	echo "󰐧 PSU";
+		echo " $lvl%"
 	fi
 }
 
