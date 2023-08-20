@@ -1975,14 +1975,14 @@ void updateicon(Client *c) {
 			return;
 		}
 		else {
-			c->icon = (char*)malloc(sizeof("󰨔 Window"));
-			strcpy(c->icon, "󰨔 Window");
+			c->icon = (char*)malloc(sizeof(" Window"));
+			strcpy(c->icon, " Window");
 			free(t);
 			return;
 		}
 	}
-	c->icon = (char*)malloc(sizeof("󰨔 Window"));
-	strcpy(c->icon, "󰨔 Window");
+	c->icon = (char*)malloc(sizeof(" Window"));
+	strcpy(c->icon, " Window");
 	free(t);
 }
 

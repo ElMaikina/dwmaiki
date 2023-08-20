@@ -65,6 +65,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browcmd[]  = { "firefox", NULL };
+//static const char *browcmd[]  = { "chromium", "--force-device-scale-factor=0.85", NULL };
 static const char *filescmd[]  = { "thunar", NULL };
 static const char *kittycmd[]  = { "kitty", "-1", NULL };
 
