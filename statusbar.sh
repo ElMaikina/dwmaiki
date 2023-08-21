@@ -61,6 +61,6 @@ clock() {
 main() {
 	while true; do
 		xsetroot -name " $(network)  $(battery)  $(volume_alsa)  $(clock) "
-		sleep 1
+		sleep 0.016
 	done
 }
