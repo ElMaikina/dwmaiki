@@ -1919,80 +1919,74 @@ void updateicon(Client *c) {
 		strcpy(t, hint->res_class);
 		XFree(hint);
 		if (strcmp("firefox", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰈹 Firefox"));
-			strcpy(c->icon, "󰈹 Firefox");
+			c->icon = (char*)malloc(sizeof("󰈹"));
+			strcpy(c->icon, "󰈹");
 			free(t);
 			return;
 		}
-		if (strcmp("Thunar", t) == 0) {
-			c->icon = (char*)malloc(sizeof(" Thunar"));
-			strcpy(c->icon, " Thunar");
+		if (strcmp("Pcmanfm", t) == 0) {
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
 		if (strcmp("feh", t) == 0) {
-			c->icon = (char*)malloc(sizeof(" Feh"));
-			strcpy(c->icon, " Feh");
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
 		if (strcmp("discord", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰙯 Discord"));
-			strcpy(c->icon, "󰙯 Discord");
+			c->icon = (char*)malloc(sizeof("󰙯"));
+			strcpy(c->icon, "󰙯");
 			free(t);
 			return;
 		}
 		if (strcmp("Spotify", t) == 0) {
-			c->icon = (char*)malloc(sizeof(" Spotify"));
-			strcpy(c->icon, " Spotify");
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
 		if (strcmp("code-oss", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰨞 VSCode"));
-			strcpy(c->icon, "󰨞 VSCode");
+			c->icon = (char*)malloc(sizeof("󰨞"));
+			strcpy(c->icon, "󰨞");
 			free(t);
 			return;
 		}
 		if (strcmp("st-256color", t) == 0) {
-			c->icon = (char*)malloc(sizeof(" St"));
-			strcpy(c->icon, " St");
-			free(t);
-			return;
-		}
-		if (strcmp("kitty", t) == 0) {
-			c->icon = (char*)malloc(sizeof(" KiTTY"));
-			strcpy(c->icon, " KiTTY");
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
 		if (strcmp("steam", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰓓 Steam"));
-			strcpy(c->icon, "󰓓 Steam");
+			c->icon = (char*)malloc(sizeof("󰓓"));
+			strcpy(c->icon, "󰓓");
 			free(t);
 			return;
 		}
 		if (strcmp("obs", t) == 0) {
-			c->icon = (char*)malloc(sizeof(" OBS Studio"));
-			strcpy(c->icon, " OBS Studio");
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
 		if (strcmp("Lutris", t) == 0) {
-			c->icon = (char*)malloc(sizeof(" Lutris"));
-			strcpy(c->icon, " Lutris");
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
 		else {
-			c->icon = (char*)malloc(sizeof(" Window"));
-			strcpy(c->icon, " Window");
+			c->icon = (char*)malloc(sizeof(""));
+			strcpy(c->icon, "");
 			free(t);
 			return;
 		}
 	}
-	c->icon = (char*)malloc(sizeof(" Window"));
-	strcpy(c->icon, " Window");
+	c->icon = (char*)malloc(sizeof(""));
+	strcpy(c->icon, "");
 	free(t);
 }
 

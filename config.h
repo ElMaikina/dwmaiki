@@ -12,11 +12,11 @@ static const char col_gray2[]       = "#222222";
 static const char col_gray3[]       = "#ffffff";
 static const char col_gray4[]       = "#ffffff";
 static const char col_cyan[]        = "#005577";
-static const char distro[]			= "󰣇 Archlinux";
+static const char distro[]			= "󰣇";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_gray2, col_cyan  },
 };
 
 /* tagging */
@@ -66,7 +66,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "st", NULL };
 static const char *browcmd[]  = { "firefox", NULL };
 //static const char *browcmd[]  = { "chromium", "--force-device-scale-factor=0.85", NULL };
-static const char *filescmd[]  = { "thunar", NULL };
+static const char *filescmd[]  = { "pcmanfm", NULL };
 static const char *kittycmd[]  = { "kitty", "-1", NULL };
 
 static const Key keys[] = {
