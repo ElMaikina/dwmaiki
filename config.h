@@ -1,18 +1,19 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
+static const unsigned int barpx		= 18;        /* height of the panel */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Century Gothic:size=10", "Symbols Nerd Font:size=12", "Font Awesome 6 Brands:size=6" };
-static const char dmenufont[]       = "Century Gothic:size=10";
+static const char *fonts[]          = { "URW Gothic:size=9", "Symbols Nerd Font:size=12", "Font Awesome 6 Brands:size=6" };
+static const char dmenufont[]       = "URW Gothic:size=9";
 static const char col_gray1[]       = "#000000";
 static const char col_gray2[]       = "#222222";
 static const char col_gray3[]       = "#ffffff";
 static const char col_gray4[]       = "#ffffff";
 static const char col_cyan[]        = "#005577";
-static const char distro[]			= "󰣇";
+static const char distro[]			= "󰣇 ArchLinux";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -20,8 +21,8 @@ static const char *colors[][3]      = {
 };
 
 /* window icons and spacing */
-#define ICONSIZE 16   /* icon size */
-#define ICONSPACING 4 /* space between icon and title */
+#define ICONSIZE 14   /* icon size */
+#define TITLELEN 192   /* icon size */
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };

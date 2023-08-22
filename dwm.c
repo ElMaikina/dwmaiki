@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <limits.h>
+#include <stdint.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <X11/cursorfont.h>
@@ -60,7 +62,7 @@
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel }; /* color schemes */
-enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
+enum { NetSupported, NetWMName, NetWMIcon, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
 	   NetWMWindowTypeDesktop,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -75,6 +77,8 @@ typedef union {
 	const void *v;
 } Arg;
 
+/* struct for mouse clickable buttons on the panel */
+
 typedef struct {
 	unsigned int click;
 	unsigned int mask;
@@ -84,34 +88,44 @@ typedef struct {
 } Button;
 
 typedef struct Monitor Monitor;
+
+/* struct in charge of managing an specific window */
 typedef struct Client Client;
 struct Client {
-	char name[256];
-	float mina, maxa;
-	int x, y, w, h;
-	int oldx, oldy, oldw, oldh;
+	unsigned int icw, ich; Picture icon; /* icon width, icon height, picure used for icon */
+	char name[256]; /* current window name (different from class) */
+	float mina, maxa; /* minimum and maximum area */
+	int x, y, w, h; /* x, y, width and height */
+	int oldx, oldy, oldw, oldh; /* old x, y, width and height */
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
-	int bw, oldbw;
-	unsigned int tags;
-	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+	int bw, oldbw; /* current and old border width */
+	unsigned int tags; /* corresponding tag */
+	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen; /* properties */
+	/* all windows are connected by a linked list */
 	Client *next;
 	Client *snext;
+	/* correspondding monitor (different of display) */
 	Monitor *mon;
+	/* window pointer */
 	Window win;
 };
 
+/* keyboard press register */
 typedef struct {
-	unsigned int mod;
-	KeySym keysym;
-	void (*func)(const Arg *);
-	const Arg arg;
+	unsigned int mod; /* modkey state */
+	KeySym keysym; /* key symbol */
+	void (*func)(const Arg *); /* function to invoke */
+	const Arg arg; /* arguments for the function */
 } Key;
 
+/* tiling layout */
+/* TODO: change it to a math function instead of an struct */
 typedef struct {
 	const char *symbol;
 	void (*arrange)(Monitor *);
 } Layout;
 
+/* tag per virtual workspace */
 typedef struct Pertag Pertag;
 struct Monitor {
 	char ltsymbol[16];
@@ -172,6 +186,7 @@ static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
 static void focusstack(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
+static Picture geticonprop(Window w, unsigned int *icw, unsigned int *ich);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
@@ -214,6 +229,7 @@ static void togglefullscr(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
+static void freeicon(Client *c);
 static void unfocus(Client *c, int setfocus);
 static void unmanage(Client *c, int destroyed);
 static void unmapnotify(XEvent *e);
@@ -225,6 +241,7 @@ static void updatenumlockmask(void);
 static void updatesizehints(Client *c);
 static void updatestatus(void);
 static void updatetitle(Client *c);
+static void updateicon(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
@@ -547,8 +564,7 @@ void configurerequest(XEvent *e)
 	XSync(dpy, False);
 }
 
-Monitor *
-createmon(void)
+Monitor *createmon(void)
 {
 	Monitor *m;
 	unsigned int i;
@@ -609,8 +625,7 @@ void detachstack(Client *c)
 	}
 }
 
-Monitor *
-dirtomon(int dir)
+Monitor *dirtomon(int dir)
 {
 	Monitor *m = NULL;
 
@@ -657,6 +672,8 @@ void drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, distro, 0);
 
 	if ((w = m->ww - tw - x) > bh) {
+		//drw_setscheme(drw, scheme[SchemeNorm]);
+		//drw_rect(drw, m->mx, m->my, m->mw, m->mh, 1, 1);
 		if (n > 0) {
 			tw = TEXTW(m->sel->name) + lrpad;
 			mw = (tw >= w || n == 1) ? 0 : (w - tw) / (n - 1);
@@ -677,15 +694,22 @@ void drawbar(Monitor *m)
 			for (c = m->clients; c; c = c->next) {
 				if (!ISVISIBLE(c))
 					continue;
-				tw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
-
+				//tw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
+				tw = ICONSIZE + lrpad;
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
-				if (tw > 0) /* trap special handling of 0 in drw_text */
-					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
+				drw_text(drw, x, 0, w, bh, 0, "  ", 0);
+				//if (tw > 0) /* trap special handling of 0 in drw_text */
+				//	drw_text(drw, x, 0, w, bh, lrpad / 2 + (m->sel->icon ? m->sel->icw + ICONSPACING : 0), m->sel->name, 0);
+				//	//drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
+				if (c->icon) 
+					drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
 				if (c->isfloating)
 					drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
 				x += tw;
 				w -= tw;
+				drw_text(drw, x, 0, TITLELEN, bh, 0, c->name, 0);
+				x += TITLELEN;
+				w -= TITLELEN;
 			}
 		}
 		drw_setscheme(drw, scheme[SchemeNorm]);
@@ -801,8 +825,7 @@ void focusstack(const Arg *arg)
 	}
 }
 
-Atom
-getatomprop(Client *c, Atom prop)
+Atom getatomprop(Client *c, Atom prop)
 {
 	int di;
 	unsigned long dl;
@@ -817,8 +840,69 @@ getatomprop(Client *c, Atom prop)
 	return atom;
 }
 
-int
-getrootptr(int *x, int *y)
+ 
+static uint32_t prealpha(uint32_t p) {
+	uint8_t a = p >> 24u;
+	uint32_t rb = (a * (p & 0xFF00FFu)) >> 8u;
+	uint32_t g = (a * (p & 0x00FF00u)) >> 8u;
+	return (rb & 0xFF00FFu) | (g & 0x00FF00u) | (a << 24u);
+}
+
+Picture geticonprop(Window win, unsigned int *picw, unsigned int *pich)
+{
+	int format;
+	unsigned long n, extra, *p = NULL;
+	Atom real;
+
+	if (XGetWindowProperty(dpy, win, netatom[NetWMIcon], 0L, LONG_MAX, False, AnyPropertyType, 
+						   &real, &format, &n, &extra, (unsigned char **)&p) != Success)
+		return None; 
+	if (n == 0 || format != 32) { XFree(p); return None; }
+
+	unsigned long *bstp = NULL;
+	uint32_t w, h, sz;
+	{
+		unsigned long *i; const unsigned long *end = p + n;
+		uint32_t bstd = UINT32_MAX, d, m;
+		for (i = p; i < end - 1; i += sz) {
+			if ((w = *i++) >= 16384 || (h = *i++) >= 16384) { XFree(p); return None; }
+			if ((sz = w * h) > end - i) break;
+			if ((m = w > h ? w : h) >= ICONSIZE && (d = m - ICONSIZE) < bstd) { bstd = d; bstp = i; }
+		}
+		if (!bstp) {
+			for (i = p; i < end - 1; i += sz) {
+				if ((w = *i++) >= 16384 || (h = *i++) >= 16384) { XFree(p); return None; }
+				if ((sz = w * h) > end - i) break;
+				if ((d = ICONSIZE - (w > h ? w : h)) < bstd) { bstd = d; bstp = i; }
+			}
+		}
+		if (!bstp) { XFree(p); return None; }
+	}
+
+	if ((w = *(bstp - 2)) == 0 || (h = *(bstp - 1)) == 0) { XFree(p); return None; }
+
+	uint32_t icw, ich;
+	if (w <= h) {
+		ich = ICONSIZE; icw = w * ICONSIZE / h;
+		if (icw == 0) icw = 1;
+	}
+	else {
+		icw = ICONSIZE; ich = h * ICONSIZE / w;
+		if (ich == 0) ich = 1;
+	}
+	*picw = icw; *pich = ich;
+
+	uint32_t i, *bstp32 = (uint32_t *)bstp;
+	for (sz = w * h, i = 0; i < sz; ++i) bstp32[i] = prealpha(bstp[i]);
+
+	Picture ret = drw_picture_create_resized(drw, (char *)bstp, w, h, icw, ich);
+	XFree(p);
+
+	return ret;
+}
+
+
+int getrootptr(int *x, int *y)
 {
 	int di;
 	unsigned int dui;
@@ -827,8 +911,7 @@ getrootptr(int *x, int *y)
 	return XQueryPointer(dpy, root, &dummy, &dummy, x, y, &di, &di, &dui);
 }
 
-long
-getstate(Window w)
+long getstate(Window w)
 {
 	int format;
 	long result = -1;
@@ -845,8 +928,7 @@ getstate(Window w)
 	return result;
 }
 
-int
-gettextprop(Window w, Atom atom, char *text, unsigned int size)
+int gettextprop(Window w, Atom atom, char *text, unsigned int size)
 {
 	char **list = NULL;
 	int n;
@@ -980,6 +1062,7 @@ void manage(Window w, XWindowAttributes *wa)
 	c->h = c->oldh = wa->height;
 	c->oldbw = wa->border_width;
 
+	updateicon(c);
 	updatetitle(c);
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
@@ -1171,6 +1254,11 @@ void propertynotify(XEvent *e)
 		}
 		if (ev->atom == XA_WM_NAME || ev->atom == netatom[NetWMName]) {
 			updatetitle(c);
+			if (c == c->mon->sel)
+				drawbar(c->mon);
+		}
+		else if (ev->atom == netatom[NetWMIcon]) {
+			updateicon(c);
 			if (c == c->mon->sel)
 				drawbar(c->mon);
 		}
@@ -1477,6 +1565,7 @@ void setup(void)
 	netatom[NetActiveWindow] = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 	netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
 	netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
+	netatom[NetWMIcon] = XInternAtom(dpy, "_NET_WM_ICON", False);
 	netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
@@ -1676,6 +1765,15 @@ void toggleview(const Arg *arg)
 		arrange(selmon);
 	}
 }
+
+void freeicon(Client *c)
+{
+	if (c->icon) {
+		XRenderFreePicture(dpy, c->icon);
+		c->icon = None;
+	}
+}
+
 
 void unfocus(Client *c, int setfocus)
 {
@@ -1923,6 +2021,12 @@ void updatetitle(Client *c)
 	if (c->name[0] == '\0') /* hack to mark broken clients */
 		strcpy(c->name, broken);
 }
+ 
+void updateicon(Client *c)
+{
+	freeicon(c);
+	c->icon = geticonprop(c->win, &c->icw, &c->ich);
+}
 
 void updatewindowtype(Client *c)
 {
@@ -1988,8 +2092,7 @@ void view(const Arg *arg)
 	arrange(selmon);
 }
 
-Client *
-wintoclient(Window w)
+Client *wintoclient(Window w)
 {
 	Client *c;
 	Monitor *m;
@@ -2001,8 +2104,7 @@ wintoclient(Window w)
 	return NULL;
 }
 
-Monitor *
-wintomon(Window w)
+Monitor *wintomon(Window w)
 {
 	int x, y;
 	Client *c;
@@ -2018,11 +2120,10 @@ wintomon(Window w)
 	return selmon;
 }
 
-/* There's no way to check accesses to destroyed windows, thus those cases are
- * ignored (especially on UnmapNotify's). Other types of errors call Xlibs
+/* there's no way to check accesses to destroyed windows, thus those cases are
+ * ignored (especially on UnmapNotify's). other types of errors call Xlibs
  * default error handler, which may call exit. */
-int
-xerror(Display *dpy, XErrorEvent *ee)
+int xerror(Display *dpy, XErrorEvent *ee)
 {
 	if (ee->error_code == BadWindow
 	|| (ee->request_code == X_SetInputFocus && ee->error_code == BadMatch)
@@ -2039,22 +2140,20 @@ xerror(Display *dpy, XErrorEvent *ee)
 	return xerrorxlib(dpy, ee); /* may call exit */
 }
 
-int
-xerrordummy(Display *dpy, XErrorEvent *ee)
+int xerrordummy(Display *dpy, XErrorEvent *ee)
 {
 	return 0;
 }
 
-/* Startup Error handler to check if another window manager
+/* startup Error handler to check if another window manager
  * is already running. */
-int
-xerrorstart(Display *dpy, XErrorEvent *ee)
+int xerrorstart(Display *dpy, XErrorEvent *ee)
 {
 	die("dwm: another window manager is already running");
 	return -1;
 }
 
-// sets the selected window as the master
+/* sets the selected window as the master */
 void zoom(const Arg *arg)
 {
 	Client *c = selmon->sel;
@@ -2115,8 +2214,7 @@ void centeredmaster(Monitor *m)
 	}
 }
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
