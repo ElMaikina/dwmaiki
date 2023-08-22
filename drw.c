@@ -4,6 +4,9 @@
 #include <string.h>
 #include <X11/Xlib.h>
 #include <X11/Xft/Xft.h>
+#include <GL/gl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
 
 #include "drw.h"
 #include "util.h"
