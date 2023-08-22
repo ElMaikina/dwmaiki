@@ -87,7 +87,6 @@ typedef struct Monitor Monitor;
 typedef struct Client Client;
 struct Client {
 	char name[256];
-	char *icon;
 	float mina, maxa;
 	int x, y, w, h;
 	int oldx, oldy, oldw, oldh;
@@ -225,7 +224,6 @@ static int updategeom(void);
 static void updatenumlockmask(void);
 static void updatesizehints(Client *c);
 static void updatestatus(void);
-void updateicon(Client *c);
 static void updatetitle(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
@@ -667,7 +665,7 @@ void drawbar(Monitor *m)
 			for (c = m->clients; c; c = c->next) {
 				if (!ISVISIBLE(c) || c == m->sel)
 					continue;
-				tw = TEXTW(c->icon);
+				tw = TEXTW(c->name);
 				if(tw < mw)
 					ew += (mw - tw);
 				else
@@ -679,11 +677,11 @@ void drawbar(Monitor *m)
 			for (c = m->clients; c; c = c->next) {
 				if (!ISVISIBLE(c))
 					continue;
-				tw = MIN(m->sel == c ? w : mw, TEXTW(c->icon));
+				tw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
 				if (tw > 0) /* trap special handling of 0 in drw_text */
-					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->icon, 0);
+					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
 				if (c->isfloating)
 					drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
 				x += tw;
@@ -1911,85 +1909,6 @@ void updatesizehints(Client *c)
 	c->hintsvalid = 1;
 }
 
-void updateicon(Client *c) {
-	XClassHint *hint = XAllocClassHint();
-	char *t;
-	if (XGetClassHint(dpy, c->win, hint)) {
-		t = (char*)malloc(sizeof(hint->res_class));
-		strcpy(t, hint->res_class);
-		XFree(hint);
-		if (strcmp("firefox", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰈹"));
-			strcpy(c->icon, "󰈹");
-			free(t);
-			return;
-		}
-		if (strcmp("Pcmanfm", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
-			free(t);
-			return;
-		}
-		if (strcmp("feh", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
-			free(t);
-			return;
-		}
-		if (strcmp("discord", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰙯"));
-			strcpy(c->icon, "󰙯");
-			free(t);
-			return;
-		}
-		if (strcmp("Spotify", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
-			free(t);
-			return;
-		}
-		if (strcmp("code-oss", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰨞"));
-			strcpy(c->icon, "󰨞");
-			free(t);
-			return;
-		}
-		if (strcmp("st-256color", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
-			free(t);
-			return;
-		}
-		if (strcmp("steam", t) == 0) {
-			c->icon = (char*)malloc(sizeof("󰓓"));
-			strcpy(c->icon, "󰓓");
-			free(t);
-			return;
-		}
-		if (strcmp("obs", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
-			free(t);
-			return;
-		}
-		if (strcmp("Lutris", t) == 0) {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
-			free(t);
-			return;
-		}
-		else {
-			c->icon = (char*)malloc(sizeof(""));
-			strcpy(c->icon, "");
-			free(t);
-			return;
-		}
-	}
-	c->icon = (char*)malloc(sizeof(""));
-	strcpy(c->icon, "");
-	free(t);
-}
-
 void updatestatus(void)
 {
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
@@ -1999,7 +1918,6 @@ void updatestatus(void)
 
 void updatetitle(Client *c)
 {
-	updateicon(c);
 	if (!gettextprop(c->win, netatom[NetWMName], c->name, sizeof c->name))
 		gettextprop(c->win, XA_WM_NAME, c->name, sizeof c->name);
 	if (c->name[0] == '\0') /* hack to mark broken clients */

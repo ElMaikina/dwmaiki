@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glu.h>
+#include <Imlib2.h>
 
 #include "drw.h"
 #include "util.h"

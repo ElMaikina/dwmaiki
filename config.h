@@ -19,6 +19,10 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { col_gray4, col_gray2, col_cyan  },
 };
 
+/* window icons and spacing */
+#define ICONSIZE 16   /* icon size */
+#define ICONSPACING 4 /* space between icon and title */
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
