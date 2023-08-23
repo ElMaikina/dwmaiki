@@ -672,8 +672,6 @@ void drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, distro, 0);
 
 	if ((w = m->ww - tw - x) > bh) {
-		//drw_setscheme(drw, scheme[SchemeNorm]);
-		//drw_rect(drw, m->mx, m->my, m->mw, m->mh, 1, 1);
 		if (n > 0) {
 			tw = TEXTW(m->sel->name) + lrpad;
 			mw = (tw >= w || n == 1) ? 0 : (w - tw) / (n - 1);
@@ -694,13 +692,9 @@ void drawbar(Monitor *m)
 			for (c = m->clients; c; c = c->next) {
 				if (!ISVISIBLE(c))
 					continue;
-				//tw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 				tw = ICONSIZE + lrpad;
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
 				drw_text(drw, x, 0, w, bh, 0, "  ", 0);
-				//if (tw > 0) /* trap special handling of 0 in drw_text */
-				//	drw_text(drw, x, 0, w, bh, lrpad / 2 + (m->sel->icon ? m->sel->icw + ICONSPACING : 0), m->sel->name, 0);
-				//	//drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
 				if (c->icon) 
 					drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
 				if (c->isfloating)
@@ -1554,7 +1548,8 @@ void setup(void)
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
 		die("no fonts could be loaded.");
 	lrpad = drw->fonts->h;
-	bh = drw->fonts->h + 2;
+	//bh = drw->fonts->h + 2;
+	bh = barpx;
 	updategeom();
 	/* init atoms */
 	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
