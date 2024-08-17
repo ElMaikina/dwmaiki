@@ -8,7 +8,7 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "URW Gothic L:size=8.5", "Symbols Nerd Font:size=8.5" };
 static const char dmenufont[]       = "URW Gothic L:size=8.5";
 static const char col_gray1[]       = "#000000";
-static const char col_gray2[]       = "#000020";
+static const char col_gray2[]       = "#000000";
 static const char col_gray3[]       = "#666666";
 static const char col_gray4[]       = "#ffffff";
 static const char col_cyan[]        = "#212121";
